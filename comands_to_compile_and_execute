@@ -1,0 +1,9 @@
+This commands was used to compile the code
+gcc -m32 -std=c99 -o wfg wfg.c read.o
+
+This line starts the makefile
+make march=x86-64
+
+Here is how to run the compiled file
+./wfg FRONTFILE.TXT
+
