@@ -531,6 +531,36 @@ double hv(FRONT ps)
 	}
 }
 
+void save_hv(double value)
+{
+	FILE *file_pointer;
+	file_pointer = fopen("hv_values.txt", "a");
+	
+	if(file_pointer == NULL)
+  	{
+  		printf("Open file error!");
+  		//return 1;
+  	}
+  
+	fprintf(file_pointer, "%f\n", value);
+	fclose(file_pointer);
+}
+
+void erase_file_if_exists()
+{
+	int status;
+ 
+    status = remove("hv_values.txt");
+ 
+    if (status == 0)
+       printf("HV file deleted successfully.\n");
+  	else
+    {
+    	printf("Unable to delete the file\n");
+    	perror("Following error occurred");
+  	}
+}
+
 int main(int argc, char *argv[]) 
 // processes each front from the file 
 {
@@ -596,6 +626,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	erase_file_if_exists();
 	totaltime = 0;
 	for (int i = 0; i < f->nFronts; i++) {      
 		struct timeval tv1, tv2;
@@ -604,7 +635,9 @@ int main(int argc, char *argv[])
 
 		n = f->fronts[i].n;
 		safe = 0;
-		printf("hv(%d) = %1.10f\n", i+1, hv(f->fronts[i])); 
+		double hv_i = hv(f->fronts[i]);
+		printf("hv(%d) = %1.10f\n", i+1, hv_i); 
+		save_hv(hv_i);
 
 		getrusage (RUSAGE_SELF, &ru_after);
 		tv1 = ru_before.ru_utime;
